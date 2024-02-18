@@ -25,13 +25,24 @@ return {
           completion = cmp.config.window.bordered(),
           documentation = cmp.config.window.bordered(),
         },
-        mapping = cmp.mapping.preset.insert({
-          ["<C-b>"] = cmp.mapping.scroll_docs(-4),
-          ["<C-f>"] = cmp.mapping.scroll_docs(4),
-          ["<C-Space>"] = cmp.mapping.complete(),
-          ["<C-e>"] = cmp.mapping.abort(),
-          ["<CR>"] = cmp.mapping.confirm({ select = true }),
-        }),
+        mapping = {
+          ['<C-e>'] = cmp.mapping.abort(),
+          ['<CR>'] = cmp.mapping.confirm({select = false}),
+          ['<TAB>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_next_item(select_opts)
+            else
+              fallback()
+            end
+          end, {'i', 's'}),
+          ['<S-TAB>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_prev_item(select_opts)
+            else
+              fallback()
+            end
+          end, {'i', 's'}),
+        },
         sources = cmp.config.sources({
           { name = "nvim_lsp" },
           { name = "luasnip" }, -- For luasnip users.
